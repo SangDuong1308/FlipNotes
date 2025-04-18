@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres
+    container_name: local_pgdb
+    # restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - local_pgdata:/var/lib/postgresql/data
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   container_name: pgadmin4_container
+  #   # restart: always
+  #   ports:
+  #     - "5050:80"
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@gamil.com
+  #     PGADMIN_DEFAULT_PASSWORD: postgres
+  #   volumes:
+  #     - pgadmin-data:/var/lib/pgadmin
+      
+  # mssql:
+  #   image: mcr.microsoft.com/mssql/server:2022-latest
+  #   container_name: mssql
+  #   environment:
+  #     - ACCEPT_EULA=Y
+  #     - MSSQL_SA_PASSWORD=111
+  #   ports:
+  #     - "1433:1433"
+  #   networks:
+  #     - my-network
+  #   volumes:
+  #     - mssql_data:/var/opt/mssql
+      
+      
+volumes:
+  local_pgdata:
+  # pgadmin-data:
+  
+networks:
+  my-network:
+    driver: bridge
