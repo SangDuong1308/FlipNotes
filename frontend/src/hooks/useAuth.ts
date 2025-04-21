@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { toaster } from '@/components/ui/toaster'
 import { AxiosError } from 'axios'
+import { isAxiosError } from 'axios'
 import {
   type Body_login_login_access_token as AccessToken,
   LoginService,
@@ -52,12 +53,22 @@ const useAuth = () => {
           : 'body' in err && typeof err.body === 'object' && err.body
             ? String(err.body.detail) || t('general.errors.somethingWentWrong')
             : t('general.errors.somethingWentWrong')
-
       toaster.create({
         title: t('general.errors.errorCreatingAccount'),
         description: errDetail,
         type: 'error',
       })
+      if (err instanceof AxiosError && err.response?.status === 409) {
+        setError(
+          t('general.errors.emailAlreadyInUse') || t('general.errors.somethingWentWrong')
+        )
+      } else if ('status' in err && err.status === 409) {
+        setError(
+          t('general.errors.emailAlreadyInUse') || t('general.errors.somethingWentWrong')
+        )
+      } else {
+        setError(errDetail)
+      }
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] })
